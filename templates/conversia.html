@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConversIA – Agentes de IA para o seu negócio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #07070f;
+    --bg2: #0e0e1c;
+    --bg3: #13132a;
+    --purple: #7c5cfc;
+    --purple2: #9b7fff;
+    --blue: #3a7bd5;
+    --blue2: #5a9cf8;
+    --text: #f0f0ff;
+    --text2: #a0a0c0;
+    --text3: #6060a0;
+    --border: rgba(124,92,252,0.18);
+    --border2: rgba(255,255,255,0.07);
+    --card: rgba(20,20,45,0.85);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background: rgba(7,7,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border2);
+  }
+  nav img { height: 70px; }
+  nav ul { display: flex; gap: 2rem; list-style: none; }
+  nav ul a {
+    color: var(--text2); text-decoration: none; font-size: 0.875rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--purple); color: #fff !important;
+    padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.875rem !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--purple2) !important; color: #fff !important; }
+
+  /* HAMBURGER */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 24px; height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .nav-hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.active span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 7rem 1.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(124,92,252,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,92,252,0.07) 1px, transparent 1px);
+    background-size: 60px 60px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 40%, black 20%, transparent 80%);
+    mask-image: radial-gradient(ellipse 90% 90% at 50% 40%, black 20%, transparent 80%);
+    pointer-events: none;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,92,252,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(124,92,252,0.12);
+    border: 1px solid rgba(124,92,252,0.3);
+    color: var(--purple2);
+    font-size: 0.8rem; font-weight: 500;
+    padding: 0.35rem 0.9rem; border-radius: 999px;
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 1;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--purple2); display: inline-block; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  #hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    max-width: 820px;
+    position: relative; z-index: 1;
+  }
+  .grad {
+    background: linear-gradient(135deg, #fff 0%, #9b7fff 35%, #5a9cf8 55%, #9b7fff 75%, #fff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shine 5s linear infinite;
+  }
+  @keyframes shine { to { background-position: 200% center; } }
+
+  #hero p {
+    color: var(--text2); font-size: 1.1rem; line-height: 1.7;
+    max-width: 560px; margin: 0 auto 2.5rem;
+    position: relative; z-index: 1;
+  }
+  .hero-btns {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .btn-primary {
+    background: var(--purple); color: #fff;
+    padding: 0.8rem 2rem; border-radius: 10px;
+    font-size: 0.95rem; font-weight: 600; text-decoration: none;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    box-shadow: 0 0 0 0 rgba(124,92,252,0);
+  }
+  .btn-primary:hover {
+    background: var(--purple2); transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(124,92,252,0.35);
+  }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    padding: 0.8rem 2rem; border-radius: 10px;
+    font-size: 0.95rem; font-weight: 500; text-decoration: none;
+    border: 1px solid var(--border2); cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s, background 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-outline:hover {
+    border-color: rgba(124,92,252,0.5);
+    background: rgba(124,92,252,0.06);
+    transform: translateY(-2px);
+  }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; justify-content: center;
+    margin-top: 4rem; flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .stat { text-align: center; }
+  .stat-n { font-size: 1.8rem; font-weight: 700; color: var(--text); }
+  .stat-l { font-size: 0.78rem; color: var(--text2); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* HERO ENTRY ANIMATIONS */
+  .hero-anim {
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.25s; }
+  .d3 { animation-delay: 0.4s; }
+  .d4 { animation-delay: 0.55s; }
+  .d5 { animation-delay: 0.75s; }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* SECTIONS */
+  section { padding: 5rem 1.5rem; }
+  .container { max-width: 1080px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    color: var(--purple2); text-transform: uppercase; margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 700;
+    line-height: 1.2; margin-bottom: 1rem;
+  }
+  .section-sub { color: var(--text2); font-size: 1rem; line-height: 1.7; max-width: 540px; }
+
+  /* SOBRE */
+  #sobre { background: var(--bg2); }
+  .sobre-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center; margin-top: 3rem;
+  }
+  .sobre-text p { color: var(--text2); line-height: 1.8; margin-bottom: 1rem; }
+  .sobre-items { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+  .sobre-item {
+    display: flex; align-items: flex-start; gap: 0.85rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .sobre-item:hover { border-color: rgba(124,92,252,0.35); }
+  .sobre-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(124,92,252,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .sobre-item-text h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .sobre-item-text p { font-size: 0.82rem; color: var(--text2); margin: 0; }
+
+  .sobre-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem;
+    position: relative;
+  }
+  .sobre-visual-tag {
+    font-size: 0.72rem; color: var(--purple2);
+    background: rgba(124,92,252,0.1);
+    border: 1px solid rgba(124,92,252,0.2);
+    border-radius: 6px; padding: 0.25rem 0.6rem;
+    display: inline-block; margin-bottom: 1.25rem;
+    font-weight: 500;
+  }
+  .chat-mock { display: flex; flex-direction: column; gap: 0.75rem; }
+  .chat-bubble {
+    max-width: 80%; padding: 0.65rem 1rem;
+    border-radius: 14px; font-size: 0.82rem; line-height: 1.5;
+  }
+  .chat-bubble.bot {
+    background: rgba(124,92,252,0.15);
+    border: 1px solid rgba(124,92,252,0.25);
+    color: var(--text); align-self: flex-start;
+  }
+  .chat-bubble.user {
+    background: rgba(58,123,213,0.15);
+    border: 1px solid rgba(58,123,213,0.25);
+    color: var(--text2); align-self: flex-end;
+  }
+  .chat-typing {
+    display: flex; gap: 4px; align-items: center; padding: 0.65rem 1rem;
+    background: rgba(124,92,252,0.1); border: 1px solid rgba(124,92,252,0.2);
+    border-radius: 14px; width: fit-content;
+  }
+  .chat-typing span {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--purple2); animation: bounce 1.2s infinite;
+  }
+  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+
+  /* AGENTES */
+  #agentes { background: var(--bg); }
+  .agentes-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem; margin-top: 3rem;
+  }
+  .agente-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.75rem;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .agente-card:hover {
+    border-color: rgba(124,92,252,0.45);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(124,92,252,0.12);
+  }
+  .agente-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--blue2));
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .agente-card:hover::before { opacity: 1; }
+  .agente-emoji { font-size: 2.2rem; margin-bottom: 1rem; display: block; }
+  .agente-tag {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--purple2);
+    background: rgba(124,92,252,0.1); border: 1px solid rgba(124,92,252,0.2);
+    padding: 0.2rem 0.6rem; border-radius: 6px; display: inline-block; margin-bottom: 0.75rem;
+  }
+  .agente-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .agente-card p { font-size: 0.85rem; color: var(--text2); line-height: 1.65; margin-bottom: 1rem; }
+  .agente-features { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+  .agente-features li {
+    font-size: 0.78rem; color: var(--text2);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .agente-features li::before { content: '✓'; color: var(--purple2); font-weight: 700; }
+
+  /* CASES */
+  #cases { background: var(--bg2); }
+  .cases-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem; margin-top: 3rem;
+  }
+  .case-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .case-card:hover { border-color: rgba(124,92,252,0.35); transform: translateY(-3px); }
+  .case-quote {
+    font-size: 0.88rem; color: var(--text2);
+    line-height: 1.7; margin-bottom: 1.25rem;
+    font-style: italic;
+  }
+  .case-quote::before { content: '"'; color: var(--purple2); font-size: 1.5rem; font-style: normal; }
+  .case-who { display: flex; align-items: center; gap: 0.75rem; }
+  .case-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .av-a { background: rgba(124,92,252,0.2); color: var(--purple2); }
+  .av-b { background: rgba(58,123,213,0.2); color: var(--blue2); }
+  .av-c { background: rgba(90,156,248,0.15); color: #5a9cf8; }
+  .case-name { font-size: 0.85rem; font-weight: 600; }
+  .case-role { font-size: 0.75rem; color: var(--text3); }
+
+  /* CONTATO */
+  #contato { background: var(--bg); }
+  .contato-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 24px; padding: 4rem 3rem;
+    text-align: center; margin-top: 3rem;
+    position: relative; overflow: hidden;
+  }
+  .contato-glow {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,92,252,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .contato-box h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; margin-bottom: 0.75rem;
+    position: relative; z-index: 1;
+  }
+  .contato-box p {
+    color: var(--text2); font-size: 1rem; margin-bottom: 2rem;
+    position: relative; z-index: 1;
+  }
+  .wpp-btn {
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    background: #25d366; color: #fff;
+    padding: 0.9rem 2.2rem; border-radius: 12px;
+    font-size: 1rem; font-weight: 700; text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    position: relative; z-index: 1;
+  }
+  .wpp-btn:hover {
+    background: #1ebd5a; transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(37,211,102,0.3);
+  }
+  .wpp-icon { font-size: 1.3rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border2);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  footer img { height: 28px; margin-bottom: 0.75rem; opacity: 0.7; }
+  footer p { font-size: 0.8rem; color: var(--text3); }
+
+  /* FUNDADOR */
+  #fundador { background: var(--bg2); }
+  .fundador-grid {
+    display: grid; grid-template-columns: 300px 1fr;
+    gap: 5rem; align-items: center; margin-top: 3rem;
+  }
+  .fundador-foto-wrap { position: relative; }
+  .fundador-foto-wrap img {
+    width: 100%; border-radius: 24px;
+    border: 1px solid var(--border);
+    display: block;
+    aspect-ratio: 4/5; object-fit: cover;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+  .fundador-foto-placeholder {
+    width: 100%; aspect-ratio: 4/5;
+    border-radius: 24px;
+    background: var(--card);
+    border: 2px dashed rgba(124,92,252,0.25);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0.75rem; color: var(--text3); font-size: 0.85rem;
+  }
+  .fundador-foto-placeholder span { font-size: 4rem; }
+  .fundador-foto-badge {
+    position: absolute; bottom: 1.25rem; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(7,7,15,0.92); backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 999px; padding: 0.45rem 1.1rem;
+    font-size: 0.78rem; font-weight: 600; color: var(--purple2);
+    white-space: nowrap;
+  }
+  .fundador-nome { font-size: 2rem; font-weight: 800; margin-bottom: 0.35rem; }
+  .fundador-cargo {
+    font-size: 0.9rem; color: var(--purple2); font-weight: 600;
+    letter-spacing: 0.03em; margin-bottom: 1.75rem;
+  }
+  .fundador-bio { color: var(--text2); line-height: 1.8; margin-bottom: 1rem; }
+  .fundador-badges { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.75rem; }
+  .fundador-badge {
+    background: rgba(124,92,252,0.08);
+    border: 1px solid rgba(124,92,252,0.2);
+    border-radius: 8px; padding: 0.4rem 0.9rem;
+    font-size: 0.8rem; color: var(--text2);
+  }
+
+  @media (max-width: 768px) {
+    nav ul {
+      display: none;
+      position: fixed;
+      top: 65px; left: 0; right: 0;
+      flex-direction: column;
+      background: rgba(7,7,15,0.97);
+      backdrop-filter: blur(16px);
+      padding: 1.5rem 2rem;
+      gap: 1.25rem;
+      border-bottom: 1px solid var(--border2);
+      z-index: 99;
+    }
+    nav ul.open { display: flex; }
+    .nav-hamburger { display: flex; }
+    .sobre-grid, .agentes-grid, .cases-grid, .fundador-grid { grid-template-columns: 1fr; }
+    .fundador-foto-wrap { max-width: 260px; margin: 0 auto; }
+    .contato-box { padding: 2.5rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <img src="https://pub-20eb267f18534054bbe01eb58c3bf17c.r2.dev/logo-sem-fundo.png" alt="ConversIA"
+       onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+  <span style="display:none; font-size:1.1rem; font-weight:700; color:#9b7fff;">ConversIA</span>
+  <ul id="nav-menu">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#agentes">Soluções</a></li>
+    <li><a href="#cases">Cases</a></li>
+    <li><a href="#fundador">Fundador</a></li>
+    <li><a href="#contato" class="nav-cta">Falar com a gente</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Abrir menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-badge hero-anim d1"><span class="dot"></span> Inteligência Artificial para Negócios</div>
+  <h1 class="hero-anim d2">Atendimento inteligente que <span class="grad">vende, responde e encanta</span> 24h por dia</h1>
+  <p class="hero-anim d3">A ConversIA cria agentes de IA personalizados para o seu negócio — automatizando o atendimento, reduzindo custos e aumentando suas conversões no WhatsApp.</p>
+  <div class="hero-btns hero-anim d4">
+    <a href="#contato" class="btn-primary">💬 Quero meu agente de IA</a>
+    <a href="#agentes" class="btn-outline">Ver soluções →</a>
+  </div>
+  <div class="hero-stats hero-anim d5">
+    <div class="stat"><div class="stat-n" data-target="3" data-suffix="+">3+</div><div class="stat-l">Agentes ativos</div></div>
+    <div class="stat"><div class="stat-n" data-target="24" data-suffix="h">24h</div><div class="stat-l">Disponibilidade</div></div>
+    <div class="stat"><div class="stat-n" data-target="3" data-suffix="x">3x</div><div class="stat-l">Mais conversões</div></div>
+    <div class="stat"><div class="stat-n" data-target="100" data-suffix="%">100%</div><div class="stat-l">Personalizado</div></div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="container">
+    <div class="section-label reveal">Sobre a ConversIA</div>
+    <h2 class="section-title reveal" style="transition-delay:0.08s">Transformamos conversas em resultados reais</h2>
+    <div class="sobre-grid">
+      <div class="sobre-text reveal" style="transition-delay:0.15s">
+        <p>A ConversIA é uma empresa especializada no desenvolvimento de agentes de inteligência artificial para negócios de todos os tamanhos. Nossa missão é simples: fazer com que cada cliente seu seja atendido de forma rápida, eficiente e humanizada — mesmo quando sua equipe não está disponível.</p>
+        <p>Criamos agentes 100% personalizados para o nicho, a linguagem e os processos da sua empresa. O resultado? Mais vendas, menos custos operacionais e clientes muito mais satisfeitos.</p>
+        <div class="sobre-items">
+          <div class="sobre-item">
+            <div class="sobre-icon">⚡</div>
+            <div class="sobre-item-text">
+              <h4>Resposta instantânea</h4>
+              <p>Seu cliente nunca mais espera. Atendimento 24h, 7 dias por semana.</p>
+            </div>
+          </div>
+          <div class="sobre-item">
+            <div class="sobre-icon">🎯</div>
+            <div class="sobre-item-text">
+              <h4>Totalmente personalizado</h4>
+              <p>Cada agente é criado sob medida para o seu negócio e seu público.</p>
+            </div>
+          </div>
+          <div class="sobre-item">
+            <div class="sobre-icon">📈</div>
+            <div class="sobre-item-text">
+              <h4>Foco em conversão</h4>
+              <p>Nossos agentes são treinados para converter visitantes em clientes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sobre-visual reveal" style="transition-delay:0.28s">
+        <div class="sobre-visual-tag">● Agente ao vivo</div>
+        <div class="chat-mock">
+          <div class="chat-bubble bot">Olá! Bem-vindo à nossa clínica 😊 Como posso te ajudar hoje?</div>
+          <div class="chat-bubble user">Quero agendar uma limpeza de pele!</div>
+          <div class="chat-bubble bot">Ótimo! Temos horários disponíveis na terça (10h ou 15h) e na quinta (14h). Qual prefere?</div>
+          <div class="chat-bubble user">Terça às 10h!</div>
+          <div class="chat-bubble bot">Perfeito! Agendamento confirmado ✅ Vou te enviar os detalhes agora.</div>
+          <div class="chat-typing"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTES -->
+<section id="agentes">
+  <div class="container">
+    <div class="section-label reveal">Nossas Soluções</div>
+    <h2 class="section-title reveal" style="transition-delay:0.08s">Agentes de IA para cada nicho</h2>
+    <p class="section-sub reveal" style="transition-delay:0.16s">Desenvolvemos agentes especializados que falam a linguagem do seu setor e entendem as necessidades dos seus clientes.</p>
+    <div class="agentes-grid">
+      <div class="agente-card reveal" style="transition-delay:0.05s">
+        <span class="agente-emoji">💅</span>
+        <span class="agente-tag">Estética</span>
+        <h3>Agente para Clínicas de Estética</h3>
+        <p>Atende, agenda, tira dúvidas sobre procedimentos e converte interessados em clientes — tudo pelo WhatsApp, sem precisar de atendente.</p>
+        <ul class="agente-features">
+          <li>Agendamento automático de procedimentos</li>
+          <li>Informações sobre tratamentos</li>
+          <li>Envio de confirmações e lembretes</li>
+          <li>Captação de novos leads</li>
+        </ul>
+      </div>
+      <div class="agente-card reveal" style="transition-delay:0.15s">
+        <span class="agente-emoji">🎉</span>
+        <span class="agente-tag">Eventos</span>
+        <h3>Agente para Empresas de Eventos</h3>
+        <p>Qualifica noivas, aniversariantes e empresas interessadas, apresenta pacotes, responde dúvidas e agenda visitas ao espaço automaticamente.</p>
+        <ul class="agente-features">
+          <li>Qualificação inteligente de leads</li>
+          <li>Apresentação de pacotes e preços</li>
+          <li>Agendamento de visitas ao espaço</li>
+          <li>Follow-up automático de propostas</li>
+        </ul>
+      </div>
+      <div class="agente-card reveal" style="transition-delay:0.25s">
+        <span class="agente-emoji">🚗</span>
+        <span class="agente-tag">Proteção Veicular</span>
+        <h3>Agente para Proteção Veicular</h3>
+        <p>Apresenta planos, simula coberturas, tira dúvidas sobre o contrato e conduz o cliente pelo funil de vendas até a adesão — de forma totalmente automatizada.</p>
+        <ul class="agente-features">
+          <li>Simulação de planos e coberturas</li>
+          <li>Qualificação por tipo de veículo</li>
+          <li>Envio de propostas personalizadas</li>
+          <li>Suporte pós-venda automatizado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section id="cases">
+  <div class="container">
+    <div class="section-label reveal">Cases & Resultados</div>
+    <h2 class="section-title reveal" style="transition-delay:0.08s">Quem já usa a ConversIA</h2>
+    <p class="section-sub reveal" style="transition-delay:0.16s">Empresas reais, resultados reais. Veja o que nossos clientes dizem sobre os agentes de IA.</p>
+    <div class="cases-grid">
+      <div class="case-card reveal" style="transition-delay:0.05s">
+        <p class="case-quote">Antes perdíamos muitos clientes por não conseguir responder rápido. Com o agente da ConversIA, nossos agendamentos aumentaram e a equipe ficou mais livre para focar nos atendimentos presenciais.</p>
+        <div class="case-who">
+          <div class="case-avatar av-a">MC</div>
+          <div>
+            <div class="case-name">Marina Costa</div>
+            <div class="case-role">Clínica de Estética · São Paulo</div>
+          </div>
+        </div>
+      </div>
+      <div class="case-card reveal" style="transition-delay:0.15s">
+        <p class="case-quote">O agente qualifica as noivas antes mesmo de falarmos com elas. Chegamos na conversa já sabendo o que a cliente quer, a data, o orçamento. Economizamos horas de trabalho todo dia.</p>
+        <div class="case-who">
+          <div class="case-avatar av-b">RF</div>
+          <div>
+            <div class="case-name">Ricardo Ferreira</div>
+            <div class="case-role">Espaço de Eventos · Rio de Janeiro</div>
+          </div>
+        </div>
+      </div>
+      <div class="case-card reveal" style="transition-delay:0.25s">
+        <p class="case-quote">A taxa de conversão no WhatsApp subiu muito. O agente responde na hora, apresenta os planos e guia o cliente até fechar. É como ter um consultor disponível o tempo todo.</p>
+        <div class="case-who">
+          <div class="case-avatar av-c">JS</div>
+          <div>
+            <div class="case-name">João Silva</div>
+            <div class="case-role">Proteção Veicular · Curitiba</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNDADOR -->
+<section id="fundador">
+  <div class="container">
+    <div class="section-label reveal">Quem está por trás</div>
+    <h2 class="section-title reveal" style="transition-delay:0.08s">Conheça o fundador</h2>
+    <div class="fundador-grid">
+      <div class="fundador-foto-wrap reveal" style="transition-delay:0.12s">
+        <img src="https://pub-027fc0a28606423bbbae8617e931c7c5.r2.dev/foto-Edson.png" alt="Edson – Fundador da ConversIA">
+        <div class="fundador-foto-badge">✦ Fundador & CEO</div>
+      </div>
+      <div class="reveal" style="transition-delay:0.25s">
+        <div class="fundador-nome">Edson Ferreira</div>
+        <div class="fundador-cargo">Fundador & CEO · ConversIA</div>
+        <p class="fundador-bio">Meu nome é Edson Ferreira e atuo há anos no desenvolvimento de sistemas, automações e soluções digitais para empresas. Ao longo dessa trajetória, participei da criação de projetos voltados para gestão comercial, relacionamento com clientes e otimização de processos, sempre buscando utilizar a tecnologia para resolver problemas reais do dia a dia das empresas. Com a evolução da inteligência artificial, percebi uma oportunidade de levar essa experiência para um novo nível, criando agentes capazes de atender clientes de forma mais rápida, organizada e eficiente através do WhatsApp. Foi dessa visão que nasceu a ConversIA.</p>
+        <p class="fundador-bio">Acredito que a inteligência artificial deve ser aplicada de forma prática, gerando valor real para os negócios e melhorando a experiência de quem está do outro lado da conversa. Por isso, meu foco não está apenas na tecnologia, mas em entender o processo de cada empresa e construir soluções que façam sentido para sua operação. Hoje, a ConversIA desenvolve Agents IA para diferentes segmentos, ajudando empresas a responder mais rápido, organizar atendimentos, qualificar oportunidades e criar experiências mais consistentes para seus clientes.</p>
+        <div class="fundador-badges">
+          <span class="fundador-badge">💻 Desenvolvimento de Sistemas</span>
+          <span class="fundador-badge">⚙️ Automação de Processos</span>
+          <span class="fundador-badge">🤖 Especialista em Agentes IA</span>
+          <span class="fundador-badge">📱 Soluções via WhatsApp</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="container">
+    <div class="section-label reveal">Contato</div>
+    <h2 class="section-title reveal" style="transition-delay:0.08s">Pronto para ter seu agente de IA?</h2>
+    <div class="contato-box reveal" style="transition-delay:0.18s">
+      <div class="contato-glow"></div>
+      <h2>Vamos conversar sobre o seu negócio</h2>
+      <p>Entre em contato pelo WhatsApp e descubra como um agente de IA personalizado pode transformar seu atendimento e aumentar suas vendas.</p>
+      <!-- ⚠️ SUBSTITUA o número abaixo pelo seu WhatsApp (somente números, com DDI+DDD) -->
+      <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20saber%20mais%20sobre%20os%20agentes%20de%20IA%20da%20ConversIA." class="wpp-btn" target="_blank">
+        <span class="wpp-icon">💬</span> Falar pelo WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="https://pub-20eb267f18534054bbe01eb58c3bf17c.r2.dev/logo-sem-fundo.png" alt="ConversIA"
+       onerror="this.style.display='none'">
+  <p>© 2026 ConversIA. Todos os direitos reservados. · Agentes de IA para negócios.</p>
+</footer>
+
+<script>
+// Scroll reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Hamburger menu
+const hamburger = document.getElementById('hamburger');
+const navMenu = document.getElementById('nav-menu');
+
+hamburger.addEventListener('click', () => {
+  navMenu.classList.toggle('open');
+  hamburger.classList.toggle('active');
+});
+
+navMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navMenu.classList.remove('open');
+    hamburger.classList.remove('active');
+  });
+});
+
+// Animated counters
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  if (!target) return;
+
+  const duration = 1500;
+  let startTime = null;
+
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-n[data-target]').forEach(el => counterObserver.observe(el));
+</script>
+
+</body>
+</html>
