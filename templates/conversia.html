@@ -382,17 +382,73 @@
   }
   .wpp-btn {
     display: inline-flex; align-items: center; gap: 0.7rem;
-    background: #25d366; color: #fff;
+    background: linear-gradient(135deg, #7c5cfc 0%, #5a9cf8 100%); color: #fff;
     padding: 0.9rem 2.2rem; border-radius: 12px;
-    font-size: 1rem; font-weight: 700; text-decoration: none;
-    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    position: relative; z-index: 1;
+    font-size: 1rem; font-weight: 700;
+    transition: filter 0.2s, transform 0.15s, box-shadow 0.2s;
+    position: relative; z-index: 1; border: none; cursor: pointer;
   }
   .wpp-btn:hover {
-    background: #1ebd5a; transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(37,211,102,0.3);
+    filter: brightness(1.1); transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(124,92,252,0.35);
   }
   .wpp-icon { font-size: 1.3rem; }
+
+  /* MODAL LEADS */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.72); backdrop-filter: blur(6px);
+    z-index: 999; align-items: center; justify-content: center; padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2.5rem 2rem; max-width: 480px; width: 100%;
+    position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1.25rem;
+    background: none; border: none; color: var(--text3);
+    font-size: 1.4rem; cursor: pointer; line-height: 1;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-box h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .modal-sub { font-size: 0.9rem; color: var(--text2); margin-bottom: 1.75rem; }
+  .form-field { margin-bottom: 1.1rem; }
+  .form-field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text2); margin-bottom: 0.4rem; }
+  .form-field input, .form-field select {
+    width: 100%; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.7rem 1rem; color: var(--text);
+    font-size: 0.95rem; outline: none; box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+  .form-field input:focus, .form-field select:focus { border-color: #7c5cfc; }
+  .form-field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a9cf8' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem;
+  }
+  .form-field select option { background: var(--bg3); }
+  .consent-row { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 1.5rem; }
+  .consent-row input[type=checkbox] { margin-top: 2px; width: 19px; height: 19px; accent-color: #7c5cfc; flex-shrink: 0; cursor: pointer; }
+  .consent-row label { font-size: 0.82rem; color: var(--text2); line-height: 1.5; cursor: pointer; }
+  .consent-row.consent-error input[type=checkbox] {
+    outline: 2px solid rgba(249,115,22,0.85);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  .submit-btn {
+    width: 100%; background: linear-gradient(135deg, #7c5cfc 0%, #5a9cf8 100%);
+    color: #fff; border: none; border-radius: 12px;
+    padding: 0.9rem; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: filter 0.2s, transform 0.15s;
+  }
+  .submit-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .modal-success { text-align: center; padding: 2rem 0; }
+  .modal-success .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .modal-success h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .modal-success p { color: var(--text2); font-size: 0.9rem; }
 
   /* FOOTER */
   footer {
@@ -699,14 +755,75 @@
     <div class="contato-box reveal" style="transition-delay:0.18s">
       <div class="contato-glow"></div>
       <h2>Vamos conversar sobre o seu negócio</h2>
-      <p>Entre em contato pelo WhatsApp e descubra como um agente de IA personalizado pode transformar seu atendimento e aumentar suas vendas.</p>
-      <!-- ⚠️ SUBSTITUA o número abaixo pelo seu WhatsApp (somente números, com DDI+DDD) -->
-      <a href="https://wa.me/5511925014093?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20saber%20mais%20sobre%20os%20agentes%20de%20IA%20da%20ConversIA." class="wpp-btn" target="_blank">
-        <span class="wpp-icon">💬</span> Falar pelo WhatsApp
-      </a>
+      <p>Preencha o formulário e nosso agente de IA vai te chamar no WhatsApp para um diagnóstico gratuito do seu atendimento.</p>
+      <button class="wpp-btn" id="openLeadModal">
+        <span class="wpp-icon">💬</span> Quero meu diagnóstico grátis
+      </button>
     </div>
   </div>
 </section>
+
+<!-- MODAL CAPTAÇÃO DE LEADS -->
+<div class="modal-overlay" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <button class="modal-close" id="closeLeadModal" aria-label="Fechar">&times;</button>
+
+    <div id="modalFormContent">
+      <h3 id="modalTitle">Quero meu diagnóstico grátis</h3>
+      <p class="modal-sub">Preencha abaixo e nosso agente de IA vai te chamar no WhatsApp em instantes.</p>
+
+      <form id="leadForm" novalidate>
+        <div class="form-field">
+          <label for="leadNome">Nome *</label>
+          <input type="text" id="leadNome" placeholder="Seu nome completo" required>
+        </div>
+        <div class="form-field">
+          <label for="leadEmpresa">Nome do seu negócio</label>
+          <input type="text" id="leadEmpresa" placeholder="Ex: Clínica Bella Estética">
+        </div>
+        <div class="form-field">
+          <label for="leadTelefone">WhatsApp *</label>
+          <input type="tel" id="leadTelefone" placeholder="(11) 99999-9999" required>
+        </div>
+        <div class="form-field">
+          <label for="leadNicho">Tipo de negócio *</label>
+          <select id="leadNicho" required>
+            <option value="">Selecione...</option>
+            <option value="Clínica Estética">Clínica Estética</option>
+            <option value="Eventos">Eventos</option>
+            <option value="Imobiliária">Imobiliária</option>
+            <option value="E-commerce">E-commerce</option>
+            <option value="Restaurante">Restaurante</option>
+            <option value="Restaurante">Proteção Veicular</option>
+            <option value="Restaurante">Seguro</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="leadObjetivo">Maior dificuldade hoje no atendimento *</label>
+          <select id="leadObjetivo">
+            <option value="">Selecione...</option>
+            <option value="Demoro pra responder">Demoro pra responder</option>
+            <option value="Perco leads fora do horário">Perco leads fora do horário</option>
+            <option value="Não tenho equipe disponível">Não tenho equipe disponível</option>
+            <option value="Quero escalar sem contratar mais gente">Quero escalar sem contratar mais gente</option>
+          </select>
+        </div>
+        <div class="consent-row">
+          <input type="checkbox" id="leadConsent">
+          <label for="leadConsent">Aceito receber mensagens da ConversIA pelo WhatsApp</label>
+        </div>
+        <button type="submit" class="submit-btn" id="submitLeadBtn">Quero meu diagnóstico grátis</button>
+      </form>
+    </div>
+
+    <div id="modalSuccess" class="modal-success" style="display:none">
+      <div class="success-icon">✅</div>
+      <h3>Recebemos seus dados!</h3>
+      <p>Em instantes nosso agente vai te chamar no WhatsApp.</p>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -773,6 +890,101 @@ const counterObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 
 document.querySelectorAll('.stat-n[data-target]').forEach(el => counterObserver.observe(el));
+
+// Webhook n8n — substitua pela URL real quando disponível
+const WEBHOOK_URL = 'https://n8n.es-entwicklungsystems.com.br/webhook/conversia-agent';
+
+// Máscara de telefone brasileiro (só visual, o payload recebe dígitos puros)
+const telInput = document.getElementById('leadTelefone');
+telInput.addEventListener('input', () => {
+  let v = telInput.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4})(\d*)$/, '($1) $2-$3');
+  else if (v.length > 2) v = v.replace(/^(\d{2})(\d*)$/, '($1) $2');
+  telInput.value = v;
+});
+
+// Modal abrir/fechar
+const leadModal = document.getElementById('leadModal');
+document.getElementById('openLeadModal').addEventListener('click', () => {
+  leadModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+
+function closeLeadModal() {
+  leadModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('closeLeadModal').addEventListener('click', closeLeadModal);
+
+document.getElementById('leadConsent').addEventListener('change', function() {
+  if (this.checked) this.closest('.consent-row').classList.remove('consent-error');
+});
+leadModal.addEventListener('click', (e) => { if (e.target === leadModal) closeLeadModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLeadModal(); });
+
+// Envio do formulário
+document.getElementById('leadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const nome = document.getElementById('leadNome').value.trim();
+  const nicho = document.getElementById('leadNicho').value;
+  const consent = document.getElementById('leadConsent').checked;
+  const telefone = '55' + document.getElementById('leadTelefone').value.replace(/\D/g, '');
+
+  if (!consent) {
+    const consentEl = document.getElementById('leadConsent');
+    consentEl.closest('.consent-row').classList.add('consent-error');
+    consentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    consentEl.focus();
+    return;
+  }
+
+  if (!nome || !telefone || !nicho) {
+    alert('Por favor preencha todos os campos obrigatórios.');
+    return;
+  }
+
+  const submitBtn = document.getElementById('submitLeadBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Enviando...';
+
+  const payload = {
+    nome,
+    empresa_nome: document.getElementById('leadEmpresa').value.trim(),
+    telefone,
+    nicho,
+    objetivo_principal: document.getElementById('leadObjetivo').value,
+    origem: 'site_generico',
+    canal_origem: 'site_institucional',
+    consentimento_whatsapp: true,
+    consentimento_at: new Date().toISOString(),
+  };
+
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    document.getElementById('modalFormContent').style.display = 'none';
+    document.getElementById('modalSuccess').style.display = 'block';
+    setTimeout(() => {
+      closeLeadModal();
+      document.getElementById('leadForm').reset();
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Quero meu diagnóstico grátis';
+      document.getElementById('modalFormContent').style.display = 'block';
+      document.getElementById('modalSuccess').style.display = 'none';
+    }, 4000);
+  } catch {
+    alert('Ocorreu um erro ao enviar. Por favor tente novamente.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Quero meu diagnóstico grátis';
+  }
+});
 </script>
 
 </body>
