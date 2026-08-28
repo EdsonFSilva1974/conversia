@@ -966,6 +966,9 @@ document.getElementById('leadForm').addEventListener('submit', async (e) => {
   };
 
   try {
+    // Aguarda 3s antes de disparar o webhook para dar folga ao n8n localizar o lead nos passos seguintes.
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -983,7 +986,8 @@ document.getElementById('leadForm').addEventListener('submit', async (e) => {
       document.getElementById('modalFormContent').style.display = 'block';
       document.getElementById('modalSuccess').style.display = 'none';
     }, 4000);
-  } catch {
+  } catch (error) {
+    console.error('Erro ao enviar formulário de lead:', error);
     alert('Ocorreu um erro ao enviar. Por favor tente novamente.');
     submitBtn.disabled = false;
     submitBtn.textContent = 'Quero meu diagnóstico grátis';
