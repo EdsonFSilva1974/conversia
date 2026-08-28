@@ -966,9 +966,6 @@ document.getElementById('leadForm').addEventListener('submit', async (e) => {
   };
 
   try {
-    // Aguarda 3s antes de disparar o webhook para dar folga ao n8n localizar o lead nos passos seguintes.
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
