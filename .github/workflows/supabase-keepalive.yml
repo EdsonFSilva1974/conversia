@@ -2,7 +2,6 @@ name: Supabase Keepalive
 
 on:
   schedule:
-    # A cada 3 dias às 08:00 UTC (limite de pausa do Supabase é 7 dias sem atividade)
     - cron: "0 8 */3 * *"
   workflow_dispatch: {}
 
@@ -10,9 +9,15 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase REST API
+      - name: Ping Supabase (query real no banco)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          curl --fail -sS \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/"
+          test -n "$SUPABASE_URL" || { echo "SUPABASE_URL vazio"; exit 1; }
+          test -n "$SUPABASE_ANON_KEY" || { echo "SUPABASE_ANON_KEY vazio"; exit 1; }
+          echo "Host: $(echo "$SUPABASE_URL" | sed -E 's#https?://([^/]+).*#\1#')"
+          curl --fail -sS -w "\nHTTP %{http_code}\n" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "${SUPABASE_URL%/}/rest/v1/keepalive?select=id&limit=1"
