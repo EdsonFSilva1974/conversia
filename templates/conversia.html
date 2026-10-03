@@ -398,6 +398,48 @@
   }
   .wpp-icon { font-size: 1.3rem; }
 
+  /* OFERTA */
+  #oferta { background: var(--bg2); }
+  .oferta-box {
+    background: var(--bg3);
+    border: 1px solid rgba(124,92,252,0.35);
+    border-radius: 24px; padding: 3.5rem 3rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .oferta-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(124,92,252,0.12);
+    border: 1px solid rgba(124,92,252,0.3);
+    color: var(--purple2);
+    font-size: 0.8rem; font-weight: 600;
+    padding: 0.35rem 0.9rem; border-radius: 999px;
+    margin-bottom: 1.25rem;
+    position: relative; z-index: 1;
+  }
+  .oferta-box h2 {
+    font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 700; margin-bottom: 0.75rem;
+    position: relative; z-index: 1;
+  }
+  .oferta-box > p {
+    color: var(--text2); font-size: 1rem; line-height: 1.7; max-width: 620px;
+    margin: 0 auto 1.75rem; position: relative; z-index: 1;
+  }
+  .oferta-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.6rem;
+    max-width: 440px; margin: 0 auto 2rem;
+    text-align: left; position: relative; z-index: 1;
+  }
+  .oferta-list li {
+    color: var(--text); font-size: 0.92rem;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.65rem 1rem;
+  }
+  .oferta-note {
+    color: var(--text3); font-size: 0.8rem; margin-top: 1.25rem;
+    position: relative; z-index: 1;
+  }
+
   /* MODAL LEADS */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
@@ -706,6 +748,27 @@
   </div>
 </section>
 
+<!-- OFERTA -->
+<section id="oferta">
+  <div class="container">
+    <div class="oferta-box reveal">
+      <div class="contato-glow"></div>
+      <div class="oferta-badge"><span class="dot"></span> Oferta de lançamento</div>
+      <h2>Teste por 20 dias. Decida depois.</h2>
+      <p>Seu agente de IA entra no ar e atende no seu WhatsApp por 20 dias, sem custo. Se você gostar do resultado e fechar contrato, a implementação sai de graça — você paga só a mensalidade.</p>
+      <ul class="oferta-list">
+        <li>✅ 20 dias de teste real, com atendimento de verdade no seu WhatsApp</li>
+        <li>✅ Implementação gratuita se você fechar contrato ao final do teste</li>
+        <li>✅ Sem multa ou compromisso durante o período de teste</li>
+      </ul>
+      <button class="wpp-btn open-lead-modal">
+        <span class="wpp-icon">🚀</span> Quero testar grátis por 20 dias
+      </button>
+      <p class="oferta-note">Vagas limitadas para o período de lançamento.</p>
+    </div>
+  </div>
+</section>
+
 <!-- FUNDADOR -->
 <section id="fundador">
   <div class="container">
@@ -741,7 +804,7 @@
       <div class="contato-glow"></div>
       <h2>Vamos conversar sobre o seu negócio</h2>
       <p>Preencha o formulário e nosso agente de IA vai te chamar no WhatsApp para um diagnóstico gratuito do seu atendimento.</p>
-      <button class="wpp-btn" id="openLeadModal">
+      <button class="wpp-btn open-lead-modal">
         <span class="wpp-icon">💬</span> Quero meu diagnóstico grátis
       </button>
     </div>
@@ -891,9 +954,11 @@ telInput.addEventListener('input', () => {
 
 // Modal abrir/fechar
 const leadModal = document.getElementById('leadModal');
-document.getElementById('openLeadModal').addEventListener('click', () => {
-  leadModal.classList.add('open');
-  document.body.style.overflow = 'hidden';
+document.querySelectorAll('.open-lead-modal').forEach(btn => {
+  btn.addEventListener('click', () => {
+    leadModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
 });
 
 function closeLeadModal() {
