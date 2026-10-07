@@ -2,7 +2,8 @@ name: Supabase Keepalive
 
 on:
   schedule:
-    - cron: "0 8 */3 * *"
+    # 4x por dia (a cada 6h). Supabase exige algumas requisições por dia na semana
+    - cron: "17 */6 * * *"
   workflow_dispatch: {}
 
 jobs:
